@@ -1,0 +1,11 @@
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('3236', '321345', 'Васькин Пётр Романович', 100, 1.5);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('3248', '324513', 'Василий Петрович Блохина', 200, 2.1);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('4935', '983211', 'Пупко Денис Дмитриевич', 120, 1.9);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('4398', '312313', 'Воровской Андрей Васильевич', 100, 1.5);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('4389', '890321', 'Сидоров Аркадий Андреевич', 200, 1.1);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('4358', '321321', 'Джон Питерс', 100, 2.2);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('9069', '876542', 'Аганэс Фёдорович Михайлов', 50, 1.0);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('4592', '321893', 'Василий Денисович Блохина', 30, 2.0);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('1234', '131313', 'Андрей Маринович Денисова', 180, 1.9);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('3461', '777777', 'Сазонова Мария Дмитриевна', 300, 2.1);
+INSERT INTO manager (manager_passport_series, manager_passport_number, manager_name, hourly_cost, percentage_comission) VALUES ('3461', '666666', 'Рзаев Кэшбек Чуркович', 100, 1.1);
