@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Менеджеры: сравнение</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+    <link href="{{ asset('css/pay.css') }}" rel="stylesheet"/>
+</head>
+<body>
+<div style="display: -webkit-inline-box;">
+    <div class="filters">
+        <form method="get" action="/">
+            <div class="extra-inputs">
+                <label>Отработали дней</label>
+                <input type="number" name="minDays" value="{{ minDays }}" placeholder="От">
+                <input type="number" name="maxDays" value="{{ maxDays }}"placeholder="До">
+            </div>
+            <div class="extra-inputs">
+                <label>Сделали тест-драйвов</label>
+                <input type="number" name="minDrives" value="{{ minDrives }}" placeholder="От">
+                <input type="number" name="maxDrives" value="{{ maxDrives }}" placeholder="До">
+            </div>
+            <div class="extra-inputs">
+                <label>Продали авто</label>
+                <input type="number" name="minSells" value="{{ minSells }}" placeholder="От">
+                <input type="number" name="maxSells" value="{{ maxSells }}" placeholder="До">
+                <input type="hidden" name="month_of_payment" value={{ month }}>
+            </div>
+            <br>
+            <input type="submit" name="filter" value="Отобрать (выбранный месяц)">
+            <a href="/?month_of_payment={{ month }}&">Очистить</a>
+            <div class="extra-inputs">
+                <label>Период премии/штрафа</label>
+                <input type="date" name="fb_start" placeholder="От">
+                <input type="date" name="fb_end" placeholder="До">
+            </div>
+            <div>
+                <input type="number" name="amount" placeholder="Сумма премии/штрафа">
+                <div style="display: inline-flex">
+                    <input type="submit" name="fine" style="background: #AA3333; color: white" value="Оштрафовать">
+                    <input type="submit" name="premium" style="background: #1c7430; color: white"  value="Премировать">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-content">
+        <form>
+        <table>
+            <tr>
+                <th></th>
+                <th>Фамилия Имя Отчество</th>
+                <th>Рабочих дней</th>
+                <th>Консультаций</th>
+                <th>Тест-драйвов</th>
+                <th>Продаж</th>
+                <th>Премия</th>
+                <th>Штраф</th>
+                <th>Выплата</th>
+            </tr>
+            {% for pay in pays %}
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>{{fios[pay[0]["id"]]}}</td>
+                    <td>{{pay[0]["working_days"]}}</td>
+                    <td>{{pay[0]["consultations"]}}</td>
+                    <td>{{pay[0]["test_drives"]}}</td>
+                    <td>{{pay[0]["sells_number"]}}</td>
+                    <td>{{pay[0]["premiuim"]}}</td>
+                    <td>{{pay[0]["fine"]}}</td>
+                    <td>{{pay[0]["amount"]}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+            <input type="submit" value="Подробная информация о выбранных менеджерах">
+        </form>
+    </div>
+    <div class="month-choice">
+            <form action="/" method="get">
+                <label>Период:</label>
+                <input name="month_of_payment" value={{month}} type="month">
+                    <input type="submit" value="Сменить месяц"></p>
+                {% if isThisCurrentMonth %}
+                    <label>Данные на {{ refresh }}</label>
+                    <input type="submit" name="refresh" value="Пересчитать">
+                {% endif %}
+            </form>
+    </div>
+</div>
+</body>
+</html>

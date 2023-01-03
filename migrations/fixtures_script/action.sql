@@ -1,0 +1,11 @@
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-19', 2, 9, 1, 1);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-11', 1, 8, 2, 1);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-12', 3, 7, 3, 3);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-13', 9, 6, 4, 1);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-14', 3, 5, 5, 2);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-15', 1, 4, 6, 3);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-16', 4, 3, 7, 4);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-17', 6, 2, 8, 1);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-18', 7, 1, 9, 2);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-09', 8, 10, 10, 3);
+INSERT INTO action (date, buyer_id, manager_id, product_id, action_type_id) VALUES ('2022-10-09', 8, 1, 10, 2);

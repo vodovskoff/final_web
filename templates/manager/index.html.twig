@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Менеджеры</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+    <link href="{{ asset('css/manager.css') }}" rel="stylesheet"/>
+</head>
+<body>
+<form>
+    <div class="month-choice">
+    <form>
+        <div style="display: inline-flex">
+        <label>Месяц начала: </label>
+        <input type="month" placeholder="Выбрать месяц начала" value="Выбрать месяц начала"></p>
+        <label>Месяц конца: </label>
+        <input type="month" placeholder="Выбрать месяц конца" value="Выбрать месяц конца"></p>
+        <input type="submit" value="Показать">
+        </div>
+    </form>
+    </div>
+</form>
+    <div style="margin-inline: auto; display: grid; width: 80%;">
+        <div class="manager_card">
+            <div class="column">
+            <form>
+                <input type="number" placeholder="Комиссионные (%)">
+                <input type="submit">
+            </form>
+            </div>
+            <div class="table-content">
+                <p1>Фамилия Имя Отчество<br></p1>
+                <p2>Комиссионные: 5%<br></p2>
+                <div class="month">
+                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
+                    </div>
+                <table>
+                    <tr>
+                        <th>Заслуги</th>
+                        <th>Дата</th>
+                        <th>Начисления</th>
+                        <th>Дата</th>
+                    </tr>
+                    <tr>
+                        <td>Продажа Honda Fit</td>
+                        <td>3.10</td>
+                        <td>Продажа Honda Fit</td>
+                        <td>3.10</td>
+                    </tr>
+                    <tr>
+                        <td>Консультация Toyota Allion</td>
+                        <td>4.10</td>
+                        <td>Консультация Toyota Allion</td>
+                        <td>4.10</td>
+                    </tr>
+                </table>
+                        <p2>Итог: 50000 рублей<br></p2>
+                </div>
+                <div class="month">
+                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Заслуги</th>
+                            <th>Дата</th>
+                            <th>Начисления</th>
+                            <th>Дата</th>
+                        </tr>
+                        <tr>
+                            <td>Продажа Honda Fit</td>
+                            <td>3.10</td>
+                            <td>Продажа Honda Fit</td>
+                            <td>3.10</td>
+                        </tr>
+                        <tr>
+                            <td>Консультация Toyota Allion</td>
+                            <td>4.10</td>
+                            <td>Консультация Toyota Allion</td>
+                            <td>4.10</td>
+                        </tr>
+                    </table>
+                    <p2>Итог: 50000 рублей<br></p2>
+                </div>
+                <div class="month">
+                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Заслуги</th>
+                            <th>Дата</th>
+                            <th>Начисления</th>
+                            <th>Дата</th>
+                        </tr>
+                        <tr>
+                            <td>Продажа Honda Fit</td>
+                            <td>3.10</td>
+                            <td>Продажа Honda Fit</td>
+                            <td>3.10</td>
+                        </tr>
+                        <tr>
+                            <td>Консультация Toyota Allion</td>
+                            <td>4.10</td>
+                            <td>Консультация Toyota Allion</td>
+                            <td>4.10</td>
+                        </tr>
+                    </table>
+                    <p2>Итог: 50000 рублей<br></p2>
+                </div>
+            </div>
+            <div class="column">
+                <form>
+                    <input type="number" placeholder="Начисление (руб)">
+                    <input type="submit" style="background: #AA3333; color: white" value="Оштрафовать">
+                    <input type="submit" style="background: #1c7430; color: white"  value="Премировать">
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

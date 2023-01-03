@@ -1,0 +1,11 @@
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('123123', '2134', 'Уткин Василий Фёдорович', 'г. Владивосток, Океанский проспект, дом 90');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('123424', '3211', 'Сталеваров Пётр Аркадьевич', 'г. Владивосток, Океанский проспект, дом 190');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('544543', '1234', 'Мозгов Аркадий Борисович', 'г. Уссурийск, ул. Советская, дом 181');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('345543', '4321', 'Аркадьев Борис Васильевич', 'г. Спасск-Дальний, ул. Борисова, дом 30');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('764566', '2313', 'Иванов Борис Николаевич', 'г. Спасск-Дальний, ул. Борисова, дом 3');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('564766', '4356', 'Гасамов Аганэс Иванович', 'г. Уссурийск, ул. Советская, дом 181');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('765756', '4321', 'Петров Дилшот Фёдорович', 'г. Уссурийск, ул. Советская, дом 1');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('756756', '1234', 'Углев Денис Александрович', 'г. Спасск-Дальний, ул. Чуркина, дом 30');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('765344', '5678', 'Майкин Виктор Михайлович', 'г. Владивосток, Океанский проспект, дом 30/1');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('234790', '7777', 'Гриняк Денис Александрович', 'г. Спасск-Дальний, ул. Борисова, дом 300');
+INSERT INTO buyer (passport_number, passport_series, FIO, address) VALUES ('324587', '8888', 'Акмайкин Александр Александрович', 'г. Спасск-Дальний, ул. Чуханова, дом 30');

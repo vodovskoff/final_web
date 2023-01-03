@@ -1,0 +1,15 @@
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (3, 2017, 1, 1800000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (5, 2010, 2, 2500000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (1, 1990, 3, 3500000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (0, 2020, 4, 1300000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (2, 2022, 5, 3400000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (3, 2015, 6, 3000000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (0, 2019, 7, 3454000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (1, 2019, 8, 3405400);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (2, 2018, 9, 4305000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (5, 2017, 10, 4395000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (1, 2018, 11, 3405000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (2, 2021, 12, 3200000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (1, 2020, 13, 8549000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (2, 2022, 1, 4300000);
+INSERT INTO product (availability_number, year_production, car_id, product_price) VALUES (1, 2017, 2, 10404000);
