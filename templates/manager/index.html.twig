@@ -16,113 +16,77 @@
 <body>
 <form>
     <div class="month-choice">
-    <form>
+    <form action="/manager">
         <div style="display: inline-flex">
         <label>Месяц начала: </label>
-        <input type="month" placeholder="Выбрать месяц начала" value="Выбрать месяц начала"></p>
+        <input type="month" value="{{ start_month_str }}" name="start_month" placeholder="Выбрать месяц начала"></p>
         <label>Месяц конца: </label>
-        <input type="month" placeholder="Выбрать месяц конца" value="Выбрать месяц конца"></p>
+        <input type="month" value="{{ last_month_str }}" name="last_month" placeholder="Выбрать месяц конца" </p>
         <input type="submit" value="Показать">
         </div>
     </form>
     </div>
 </form>
     <div style="margin-inline: auto; display: grid; width: 80%;">
+        {% for manager in managers%}
         <div class="manager_card">
             <div class="column">
-            <form>
-                <input type="number" placeholder="Комиссионные (%)">
+            <form action="/manager">
+                <input type="number" step=0.01 name="comission" placeholder="Комиссионные (%)">
+                <input type="hidden" name="id" value="{{ manager.id }}" placeholder="Комиссионные (%)">
                 <input type="submit">
             </form>
             </div>
             <div class="table-content">
-                <p1>Фамилия Имя Отчество<br></p1>
-                <p2>Комиссионные: 5%<br></p2>
+                <p1>{{ manager.fio }}<br></p1>
+                <p2>Комиссионные: {{ manager.comission }}%<br></p2>
+                {% for month in manager.monthes %}
                 <div class="month">
-                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
+                    <div class="final-amount"><p2>Месяц {{month.month}} отработал {{month.days}} дней</p2>
                     </div>
-                <table>
-                    <tr>
-                        <th>Заслуги</th>
-                        <th>Дата</th>
-                        <th>Начисления</th>
-                        <th>Дата</th>
-                    </tr>
-                    <tr>
-                        <td>Продажа Honda Fit</td>
-                        <td>3.10</td>
-                        <td>Продажа Honda Fit</td>
-                        <td>3.10</td>
-                    </tr>
-                    <tr>
-                        <td>Консультация Toyota Allion</td>
-                        <td>4.10</td>
-                        <td>Консультация Toyota Allion</td>
-                        <td>4.10</td>
-                    </tr>
-                </table>
-                        <p2>Итог: 50000 рублей<br></p2>
-                </div>
-                <div class="month">
-                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
-                    </div>
+                <div style="display:flex;">
                     <table>
                         <tr>
                             <th>Заслуги</th>
                             <th>Дата</th>
-                            <th>Начисления</th>
-                            <th>Дата</th>
                         </tr>
                         <tr>
-                            <td>Продажа Honda Fit</td>
-                            <td>3.10</td>
-                            <td>Продажа Honda Fit</td>
-                            <td>3.10</td>
-                        </tr>
-                        <tr>
-                            <td>Консультация Toyota Allion</td>
-                            <td>4.10</td>
-                            <td>Консультация Toyota Allion</td>
-                            <td>4.10</td>
+                            {% for action in month.actions %}
+                            <tr>
+                                <td>{{ action.action }}</td>
+                                <td>{{ action.date }}</td>
+                            </tr>
+                            {% endfor %}
                         </tr>
                     </table>
-                    <p2>Итог: 50000 рублей<br></p2>
-                </div>
-                <div class="month">
-                    <div class="final-amount"><p2>Месяц К отработал 25 дней</p2>
-                    </div>
                     <table>
-                        <tr>
-                            <th>Заслуги</th>
-                            <th>Дата</th>
-                            <th>Начисления</th>
-                            <th>Дата</th>
-                        </tr>
-                        <tr>
-                            <td>Продажа Honda Fit</td>
-                            <td>3.10</td>
-                            <td>Продажа Honda Fit</td>
-                            <td>3.10</td>
-                        </tr>
-                        <tr>
-                            <td>Консультация Toyota Allion</td>
-                            <td>4.10</td>
-                            <td>Консультация Toyota Allion</td>
-                            <td>4.10</td>
-                        </tr>
-                    </table>
-                    <p2>Итог: 50000 рублей<br></p2>
+                            <tr>
+                                <th>Начисление</th>
+                                <th>Дата</th>
+                            </tr>
+                            {% for fb in month.fb %}
+                                <tr>
+                                    <td>{{ fb.amount }}</td>
+                                    <td>{{ fb.date }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                 </div>
+                        <p2>Итог: {{ month.amount}} рублей<br></p2>
+                </div>
+                {% endfor %}
             </div>
             <div class="column">
-                <form>
-                    <input type="number" placeholder="Начисление (руб)">
-                    <input type="submit" style="background: #AA3333; color: white" value="Оштрафовать">
-                    <input type="submit" style="background: #1c7430; color: white"  value="Премировать">
+                <form action="/manager">
+                    <input type="number" required="required" name="amount" placeholder="Начисление (руб)">
+                    <input type="date" required="required" name="date" placeholder="Дата">
+                    <input type="hidden" name="id" value="{{ manager.id }}" placeholder="Комиссионные (%)">
+                    <input type="submit" name="fine" style="background: #AA3333; color: white" value="Оштрафовать">
+                    <input type="submit" name="premium" style="background: #1c7430; color: white"  value="Премировать">
                 </form>
             </div>
         </div>
-
+        {% endfor %}
     </div>
 </body>
 </html>

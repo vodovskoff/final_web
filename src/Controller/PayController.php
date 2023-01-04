@@ -20,9 +20,6 @@ class PayController extends AbstractController
 {
     private EntityManagerInterface $em;
 
-    private array $possibleStatus = ["open", "success", "fail"];
-    private array $possibleStatusQuestion = ["yes", "no", "wait"];
-
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -130,6 +127,10 @@ class PayController extends AbstractController
         foreach ($pays as $pay){
             $fios[$pay[0]['id']] = $payRepository->find($pay[0]['id'])->getManager()->getManagerName();
         }
+        $ids = array();
+        foreach ($pays as $pay){
+            $ids[$pay[0]['id']] = $payRepository->find($pay[0]['id'])->getManager()->getId();
+        }
 
         return $this->render('pay/index.html.twig', [
             'controller_name' => 'PayController',
@@ -137,12 +138,13 @@ class PayController extends AbstractController
             'refresh' => $refresh->format("Y-M-d"),
             'pays' => $pays,
             'fios' => $fios,
+            'ids' => $ids,
             'isThisCurrentMonth' => $isThisCurrentMonth,
             'minDays' => $minDays, 'maxDays' => $maxDays, 'minSells' => $minSells, 'maxSells' => $maxSells, 'minDrives' => $minDrives, 'maxDrives' => $maxDrives,
         ]);
     }
 
-    private function refreshOrUpdatePay(Manager $manager,
+    public function refreshOrUpdatePay(Manager $manager,
                                         PayRepository $payRepository,
                                         ActionRepository           $actionRepository,
                                         String                   $month,

@@ -12,10 +12,10 @@
 table {
     margin-top: 3px;
     margin-bottom: 15px;
-    margin-inline: 10px;
     border-collapse: collapse;
     border-spacing: 0;
     width: 98%;
+    height: fit-content;
     border: 1px solid #ddd;
 }
 

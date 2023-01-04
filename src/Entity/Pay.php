@@ -207,6 +207,9 @@ class Pay
         foreach ($sells as $sell){
             $amount = $amount + $sell->getProduct()->getProductPrice()*$this->getManager()->getPercentageComission()/100;
         }
+        $fines = $fineAndBonusRepository->findAmountByManagerAndMonth($this->getManager()->getId(), $month, -1);
+        $prems = $fineAndBonusRepository->findAmountByManagerAndMonth($this->getManager()->getId(), $month, 1);
+        $amount = $amount - $fines + $prems;
         $this->setAmount($amount);
         return $this;
     }
