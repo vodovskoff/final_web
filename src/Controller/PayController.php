@@ -114,23 +114,22 @@ class PayController extends AbstractController
                 }
 
             }
-            foreach ($managers as $manager) {
-                if ($payRepository->findOneByManagerAndMonth($manager->getId(), $monthFormat)) {
-                    $pays[] = $payRepository->findOneByManagerAndMonthArray($manager->getId(), $monthFormat);
+            if(count($pays)===0){
+                foreach ($managers as $manager) {
+                    if ($payRepository->findOneByManagerAndMonth($manager->getId(), $monthFormat)) {
+                        $pays[] = $payRepository->findOneByManagerAndMonthArray($manager->getId(), $monthFormat);
+                    }
                 }
             }
-            foreach ($pays as $pay){
-                $pay = $pay[0];
-            }
         }
+
         $fios = array();
-        foreach ($pays as $pay){
-            $fios[$pay[0]['id']] = $payRepository->find($pay[0]['id'])->getManager()->getManagerName();
-        }
         $ids = array();
         foreach ($pays as $pay){
+            $fios[$pay[0]['id']] = $payRepository->find($pay[0]['id'])->getManager()->getManagerName();
             $ids[$pay[0]['id']] = $payRepository->find($pay[0]['id'])->getManager()->getId();
         }
+
 
         return $this->render('pay/index.html.twig', [
             'controller_name' => 'PayController',
