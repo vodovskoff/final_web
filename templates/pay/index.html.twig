@@ -34,12 +34,12 @@
                 <input type="hidden" name="month_of_payment" value={{ month }}>
             </div>
             <br>
-            <input type="submit" name="filter" value="Отобрать (выбранный месяц)">
+            <input type="submit" name="filter" value="Отобрать">
             <a href="/?month_of_payment={{ month }}&">Очистить</a>
+            {% if isThisCurrentMonth %}
             <div class="extra-inputs">
-                <label>Период премии/штрафа</label>
-                <input type="date" name="fb_start" placeholder="От">
-                <input type="date" name="fb_end" placeholder="До">
+                <label>Дата премии/штрафа</label>
+                <input type="date" min="2022-09-01" max="2023-01-20" name="fb_end" placeholder="До">
             </div>
             <div>
                 <input type="number" name="amount" placeholder="Сумма премии/штрафа">
@@ -48,6 +48,7 @@
                     <input type="submit" name="premium" style="background: #1c7430; color: white"  value="Премировать">
                 </div>
             </div>
+            {% endif %}
         </form>
     </div>
     <div class="table-content">
@@ -83,12 +84,13 @@
     </div>
     <div class="month-choice">
             <form action="/" method="get">
-                <label>Период:</label>
-                <input name="month_of_payment" value={{month}} type="month">
-                    <input type="submit" value="Сменить месяц"></p>
+                <label for="month_of_payment">Период:</label>
+                <input id="month_of_payment" name="month_of_payment" value={{month}} type="month">
+                    <input type="submit" value="Сменить месяц">
                 {% if isThisCurrentMonth %}
-                    <label>Данные на {{ refresh }}</label>
                     <input type="submit" name="refresh" value="Пересчитать">
+                    <label>Данные на {{ refresh }}</label>
+
                 {% endif %}
             </form>
     </div>

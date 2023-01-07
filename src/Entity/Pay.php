@@ -202,7 +202,7 @@ class Pay
         $this->setWorkingDays($managerTimesheetRepository->countWorkingDays($this->getManager()->getId(), $month));
         $this->setFine($fineAndBonusRepository->findAmountByManagerAndMonth($this->getManager()->getId(), $month, -1));
         $this->setPremiuim($fineAndBonusRepository->findAmountByManagerAndMonth($this->getManager()->getId(), $month, 1));
-        $amount = $this->getManager()->getHourlyCost()*8*$this->getWorkingDays() + $this->getConsultations()*200;
+        $amount = $this->getManager()->getHourlyCost()*8*$this->getWorkingDays() + $this->getConsultations()*200 + $this->getTestDrives()*300;
         $sells = $actionRepository->getActionsByTypeAndManager($this->getManager()->getId(), 2, $month);
         foreach ($sells as $sell){
             $amount = $amount + $sell->getProduct()->getProductPrice()*$this->getManager()->getPercentageComission()/100;

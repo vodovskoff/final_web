@@ -99,6 +99,7 @@ class ManagerController extends AbstractController
         $last_real_date = \DateTime::createFromFormat("Y-m-d", $last_date);
 
         foreach ($managers_id as $id){
+            setlocale(LC_ALL, 'ru_RU', 'ru_RU.UTF-8', 'ru', 'russian');
             $all_months = array();
             $first_real_date_temp = \DateTime::createFromFormat("Y-m", $start_month_str);
             while ($first_real_date_temp<$last_real_date){

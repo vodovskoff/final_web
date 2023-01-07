@@ -61,7 +61,6 @@ class PayController extends AbstractController
             }
         }
 
-        //если для этого месяца не все посчитали - пересчитать
         if (!$areAllManagersCounted or $request->get('refresh')) {
             $currentTime = new \DateTime();
             foreach ($managers as $manager) {
@@ -71,17 +70,17 @@ class PayController extends AbstractController
         }
 
         if (!$request->get('filter') and (!$request->get('premium') and !$request->get('fine'))) {
-            echo"h";
             foreach ($managers as $manager) {
                 if ($payRepository->findOneByManagerAndMonth($manager->getId(), $monthFormat)) {
                     $pays[] = $payRepository->findOneByManagerAndMonthArray($manager->getId(), $monthFormat);
                 }
             }
-            foreach ($pays as $pay){
-                $pay = $pay[0];
+            foreach ($managers as $manager) {
+                $currentTime = new \DateTime();
+                $refresh = $this->refreshOrUpdatePay($manager, $payRepository, $actionRepository, $month, $currentTime, $fineAndBonusRepository, $managerTimesheetRepository);
             }
+            $this->em->flush();
         } else {
-            echo"fg";
             strlen($request->get('minDays')) > 0 ? $minDays = (int)$request->get('minDays') : $minDays = null;
             strlen($request->get('maxDays')) > 0 ? $maxDays = (int)$request->get('maxDays') : $maxDays = null;
             strlen($request->get('minSells')) > 0 ? $minSells = (int)$request->get('minSells') : $minSells = null;
@@ -89,20 +88,24 @@ class PayController extends AbstractController
             strlen($request->get('minDrives')) > 0 ? $minDrives = (int)$request->get('minDrives') : $minDrives = null;
             strlen($request->get('maxDrives')) > 0 ? $maxDrives = (int)$request->get('maxDrives') : $maxDrives = null;
 
-            if (($request->get('fine') or $request->get('premium')) and $request->get('amount') and $request->get('fb_start') and $request->get('fb_end')) {
-                echo "f";
+            if (($request->get('fine') or $request->get('premium')) and $request->get('amount') and $request->get('fb_end')) {
                 if ($request->get('fine')){
                     $amount = - (int) $request->get('amount');
                 } else {
                     $amount = (int) $request->get('amount');
                 }
-                $paysTemp = $payRepository->findObjecctsByFilters($monthFormat, $minDays, $maxDays, $minSells, $maxSells, $minDrives, $maxDrives);
+
+                if(!$request->get('fine') and !$request->get('premium')){
+                    $paysTemp = $payRepository->findObjecctsByFilters($monthFormat, $minDays, $maxDays, $minSells, $maxSells, $minDrives, $maxDrives);
+                } else {
+                    $paysTemp = $payRepository->findObjecctsByFilters($monthFormat, null, null, null, null, null, null);
+                }
+
                 foreach ($paysTemp as $pay){
-                    echo "fet";
                     $fb = new FineAndBonus();
                     $fb->setAmount($amount);
                     $fb->setManager($pay->getManager());
-                    $fb->setDateOfStart(\DateTime::createFromFormat("Y-m-d",$request->get('fb_start')));
+                    $fb->setDateOfStart(\DateTime::createFromFormat("Y-m-d",$request->get('fb_end')));
                     $fb->setDateOfEnd(\DateTime::createFromFormat("Y-m-d",$request->get('fb_end')));
                     $this->em->persist($fb);
                 }
@@ -114,7 +117,7 @@ class PayController extends AbstractController
                 }
 
             }
-            if(count($pays)===0){
+            if(count($pays)===0 and $request->get('filter')===null){
                 foreach ($managers as $manager) {
                     if ($payRepository->findOneByManagerAndMonth($manager->getId(), $monthFormat)) {
                         $pays[] = $payRepository->findOneByManagerAndMonthArray($manager->getId(), $monthFormat);
@@ -134,7 +137,7 @@ class PayController extends AbstractController
         return $this->render('pay/index.html.twig', [
             'controller_name' => 'PayController',
             'month' => $month,
-            'refresh' => $refresh->format("Y-M-d"),
+            'refresh' => $refresh->format("Y.m.d"),
             'pays' => $pays,
             'fios' => $fios,
             'ids' => $ids,
@@ -158,7 +161,6 @@ class PayController extends AbstractController
 
         $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
         $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
-
         $pay = $payRepository->findOneByManagerAndMonth($manager->getId(), $monthFormat);
         if($pay){
             $pay->refresh($actionRepository, $monthFormat, $refresh_date, $fineAndBonusRepository, $managerTimesheetRepository);
@@ -171,6 +173,7 @@ class PayController extends AbstractController
             $pay->refresh($actionRepository, $monthFormat, $refresh_date, $fineAndBonusRepository, $managerTimesheetRepository);
             $this->em->persist($pay);
         }
+        $this->em->flush();
         return $refresh_date;
     }
 }
