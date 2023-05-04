@@ -15,6 +15,9 @@ services:
     build:
       context: .
       dockerfile: ./php/Dockerfile
+      args:
+        ENV: dev
+        XDEBUG_ENABLED: 1
     container_name: php81-container
     ports:
       - "9000:9000"
@@ -22,6 +25,11 @@ services:
       - ./:/var/www/project
     environment:
       APP_DEBUG: "true"
+      XDEBUG_MODE: "debug"
+      XDEBUG_CONFIG: "start_with_request=yes client_port=9007 client_host=host.docker.internal"
+      # XDEBUG_CONFIG: "start_with_request=yes client_port=9007 client_host=172.18.0.1"
+      XDEBUG_SESSION: "PHPSTORM"
+      PHP_IDE_CONFIG: "serverName=avtosalon"
       DATABASE_URL: "mysql://user:password@mysql8-service:3306/avtosalon?serverVersion=5.7.27&charset=utf8"
 
   mysql8-service:
