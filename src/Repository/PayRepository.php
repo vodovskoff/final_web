@@ -43,7 +43,7 @@ class PayRepository extends ServiceEntityRepository
 
     public function findObjecctsByFilters(\DateTime $month, ?int $minDays, ?int $maxDays, ?int $minSells, ?int $maxSells, ?int $minDrives, ?int $maxDrives):array
     {
-        list($fromFormat, $toFormat) = FormatService::formatDates($month);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
         $q = $this->getFilteredBuilder($minDrives, $maxDrives, $minSells, $maxSells, $minDays, $maxDays, $fromFormat, $toFormat);
 
@@ -52,10 +52,7 @@ class PayRepository extends ServiceEntityRepository
 
     public function findByFilters(\DateTime $month, ?int $minDays, ?int $maxDays, ?int $minSells, ?int $maxSells, ?int $minDrives, ?int $maxDrives):array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
         $q = $this->getFilteredBuilder($minDrives, $maxDrives, $minSells, $maxSells, $minDays, $maxDays, $fromFormat, $toFormat);
 
@@ -64,34 +61,18 @@ class PayRepository extends ServiceEntityRepository
 
     public function findOneByManagerAndMonth(int $managerId, \DateTime $month): ?Pay
     {
-        list($fromFormat, $toFormat) = FormatService::formatDates($month);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
-        return $this->createQueryBuilder('p')
-            ->join('p.manager', 'm')
-            ->andWhere('m.id = :manager_id')
-            ->andWhere('p.start_of_period BETWEEN :from AND :to')
-            ->andWhere('p.end_of_period BETWEEN :from AND :to')
-            ->setParameter('from', $fromFormat)
-            ->setParameter('to', $toFormat)
-            ->setParameter('manager_id', $managerId)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $q = $this->findOneQuery($fromFormat, $toFormat, $managerId);
+        return $q->getOneOrNullResult();
     }
 
     public function findOneByManagerAndMonthArray(int $managerId, \DateTime $month): ?Array
     {
-        list($fromFormat, $toFormat) = FormatService::formatDates($month);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
-        return $this->createQueryBuilder('p')
-            ->join('p.manager', 'm')
-            ->andWhere('m.id = :manager_id')
-            ->andWhere('p.start_of_period BETWEEN :from AND :to')
-            ->andWhere('p.end_of_period BETWEEN :from AND :to')
-            ->setParameter('from', $fromFormat)
-            ->setParameter('to', $toFormat)
-            ->setParameter('manager_id', $managerId)
-            ->getQuery()
-            ->getArrayResult();
+        $q = $this->findOneQuery($fromFormat, $toFormat, $managerId);
+        return $q->getArrayResult();
     }
 
     /**
@@ -127,6 +108,26 @@ class PayRepository extends ServiceEntityRepository
         if ($maxSells !== null) $q = $q->setParameter('maxSells', $maxSells);
         if ($minDays !== null) $q = $q->setParameter('minDays', $minDays);
         if ($maxDays !== null) $q = $q->setParameter('maxDays', $maxDays);
+        return $q;
+    }
+
+    /**
+     * @param $fromFormat
+     * @param $toFormat
+     * @param int $managerId
+     * @return \Doctrine\ORM\Query
+     */
+    public function findOneQuery($fromFormat, $toFormat, int $managerId): \Doctrine\ORM\Query
+    {
+        $q = $this->createQueryBuilder('p')
+            ->join('p.manager', 'm')
+            ->andWhere('m.id = :manager_id')
+            ->andWhere('p.start_of_period BETWEEN :from AND :to')
+            ->andWhere('p.end_of_period BETWEEN :from AND :to')
+            ->setParameter('from', $fromFormat)
+            ->setParameter('to', $toFormat)
+            ->setParameter('manager_id', $managerId)
+            ->getQuery();
         return $q;
     }
 }

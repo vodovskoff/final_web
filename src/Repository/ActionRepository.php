@@ -43,11 +43,7 @@ class ActionRepository extends ServiceEntityRepository
 
     public function countActionsByTypeAndUser(int $managerId, int $actionType, \DateTime $month): int
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
         $q =  $this->createQueryBuilder('a')
         ->join('a.manager', 'm')
