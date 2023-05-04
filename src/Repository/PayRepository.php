@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Pay;
+use App\Service\FormatService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node\Expr\Array_;
@@ -40,48 +41,11 @@ class PayRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Pay[] Returns an array of Pay objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
     public function findObjecctsByFilters(\DateTime $month, ?int $minDays, ?int $maxDays, ?int $minSells, ?int $maxSells, ?int $minDrives, ?int $maxDrives):array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDates($month);
 
-        $q = $this->createQueryBuilder('p')
-            ->andWhere('p.start_of_period BETWEEN :from AND :to')
-            ->andWhere('p.end_of_period BETWEEN :from AND :to');
-
-        if ($minDrives!==null) $q=$q->andWhere('p.test_drives >= :minDrives');
-        if ($maxDrives!==null) $q=$q->andWhere('p.test_drives <= :maxDrives');
-        if ($minSells!==null) $q=$q->andWhere('p.sells_number >= :minSells');
-        if ($maxSells!==null) $q=$q->andWhere('p.sells_number <= :maxSells');
-        if ($minDays!==null) $q=$q->andWhere('p.working_days >= :minDays');
-        if ($maxDays!==null) $q=$q->andWhere('p.working_days <= :maxDays');
-
-        $q = $q->setParameter('from', $fromFormat)
-            ->setParameter('to', $toFormat);
-
-        if ($minDrives!==null) $q=$q->setParameter('minDrives', $minDrives);
-        if ($maxDrives!==null) $q=$q->setParameter('maxDrives', $maxDrives);
-        if ($minSells!==null) $q=$q->setParameter('minSells', $minSells);
-        if ($maxSells!==null) $q=$q->setParameter('maxSells', $maxSells);
-        if ($minDays!==null) $q=$q->setParameter('minDays', $minDays);
-        if ($maxDays!==null) $q=$q->setParameter('maxDays', $maxDays);
+        $q = $this->getFilteredBuilder($minDrives, $maxDrives, $minSells, $maxSells, $minDays, $maxDays, $fromFormat, $toFormat);
 
         return $q->getQuery()->getResult();
     }
@@ -93,37 +57,14 @@ class PayRepository extends ServiceEntityRepository
         $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
         $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
 
-        $q = $this->createQueryBuilder('p')
-            ->andWhere('p.start_of_period BETWEEN :from AND :to')
-            ->andWhere('p.end_of_period BETWEEN :from AND :to');
-
-        if ($minDrives!==null) $q=$q->andWhere('p.test_drives >= :minDrives');
-        if ($maxDrives!==null) $q=$q->andWhere('p.test_drives <= :maxDrives');
-        if ($minSells!==null) $q=$q->andWhere('p.sells_number >= :minSells');
-        if ($maxSells!==null) $q=$q->andWhere('p.sells_number <= :maxSells');
-        if ($minDays!==null) $q=$q->andWhere('p.working_days >= :minDays');
-        if ($maxDays!==null) $q=$q->andWhere('p.working_days <= :maxDays');
-
-        $q = $q->setParameter('from', $fromFormat)
-            ->setParameter('to', $toFormat);
-
-        if ($minDrives!==null) $q=$q->setParameter('minDrives', $minDrives);
-        if ($maxDrives!==null) $q=$q->setParameter('maxDrives', $maxDrives);
-        if ($minSells!==null) $q=$q->setParameter('minSells', $minSells);
-        if ($maxSells!==null) $q=$q->setParameter('maxSells', $maxSells);
-        if ($minDays!==null) $q=$q->setParameter('minDays', $minDays);
-        if ($maxDays!==null) $q=$q->setParameter('maxDays', $maxDays);
+        $q = $this->getFilteredBuilder($minDrives, $maxDrives, $minSells, $maxSells, $minDays, $maxDays, $fromFormat, $toFormat);
 
         return $q->getQuery()->getArrayResult();
     }
 
     public function findOneByManagerAndMonth(int $managerId, \DateTime $month): ?Pay
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDates($month);
 
         return $this->createQueryBuilder('p')
             ->join('p.manager', 'm')
@@ -139,11 +80,7 @@ class PayRepository extends ServiceEntityRepository
 
     public function findOneByManagerAndMonthArray(int $managerId, \DateTime $month): ?Array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDates($month);
 
         return $this->createQueryBuilder('p')
             ->join('p.manager', 'm')
@@ -155,5 +92,41 @@ class PayRepository extends ServiceEntityRepository
             ->setParameter('manager_id', $managerId)
             ->getQuery()
             ->getArrayResult();
+    }
+
+    /**
+     * @param int|null $minDrives
+     * @param int|null $maxDrives
+     * @param int|null $minSells
+     * @param int|null $maxSells
+     * @param int|null $minDays
+     * @param int|null $maxDays
+     * @param $fromFormat
+     * @param $toFormat
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getFilteredBuilder(?int $minDrives, ?int $maxDrives, ?int $minSells, ?int $maxSells, ?int $minDays, ?int $maxDays, $fromFormat, $toFormat): \Doctrine\ORM\QueryBuilder
+    {
+        $q = $this->createQueryBuilder('p')
+            ->andWhere('p.start_of_period BETWEEN :from AND :to')
+            ->andWhere('p.end_of_period BETWEEN :from AND :to');
+
+        if ($minDrives !== null) $q = $q->andWhere('p.test_drives >= :minDrives');
+        if ($maxDrives !== null) $q = $q->andWhere('p.test_drives <= :maxDrives');
+        if ($minSells !== null) $q = $q->andWhere('p.sells_number >= :minSells');
+        if ($maxSells !== null) $q = $q->andWhere('p.sells_number <= :maxSells');
+        if ($minDays !== null) $q = $q->andWhere('p.working_days >= :minDays');
+        if ($maxDays !== null) $q = $q->andWhere('p.working_days <= :maxDays');
+
+        $q = $q->setParameter('from', $fromFormat)
+            ->setParameter('to', $toFormat);
+
+        if ($minDrives !== null) $q = $q->setParameter('minDrives', $minDrives);
+        if ($maxDrives !== null) $q = $q->setParameter('maxDrives', $maxDrives);
+        if ($minSells !== null) $q = $q->setParameter('minSells', $minSells);
+        if ($maxSells !== null) $q = $q->setParameter('maxSells', $maxSells);
+        if ($minDays !== null) $q = $q->setParameter('minDays', $minDays);
+        if ($maxDays !== null) $q = $q->setParameter('maxDays', $maxDays);
+        return $q;
     }
 }

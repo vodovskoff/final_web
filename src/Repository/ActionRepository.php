@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Action;
+use App\Service\FormatService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -40,21 +41,6 @@ class ActionRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Action[] Returns an array of Action objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
     public function countActionsByTypeAndUser(int $managerId, int $actionType, \DateTime $month): int
     {
         $from = $month->format("Y-m-01");
@@ -80,13 +66,9 @@ class ActionRepository extends ServiceEntityRepository
 
     public function getByManagerAndDate(int $managerId, \DateTime $month): array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
-
-        $q =  $this->createQueryBuilder('a')
+        return $this->createQueryBuilder('a')
             ->join('a.manager', 'm')
             ->andWhere('m.id = :m_id')
             ->andWhere('a.date BETWEEN :from AND :to')
@@ -95,18 +77,13 @@ class ActionRepository extends ServiceEntityRepository
             ->setParameter('to', $toFormat)
             ->getQuery()
             ->getResult();
-        return $q;
     }
 
     public function getActionsByTypeAndManager(int $managerId, int $actionType, \DateTime $month): array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
-
-        $q =  $this->createQueryBuilder('a')
+        return $this->createQueryBuilder('a')
             ->join('a.manager', 'm')
             ->join('a.action_type', 'at')
             ->andWhere('at.id = :at_id')
@@ -118,6 +95,5 @@ class ActionRepository extends ServiceEntityRepository
             ->setParameter('to', $toFormat)
             ->getQuery()
             ->getResult();
-        return $q;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\FineAndBonus;
+use App\Service\FormatService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FineAndBonusRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, FormatService $formatService)
     {
         parent::__construct($registry, FineAndBonus::class);
     }
@@ -39,49 +40,25 @@ class FineAndBonusRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FineAndBonus[] Returns an array of FineAndBonus objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
     public function findByManagerAndMonth(int $managerId, \DateTime $month): array
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
         $q = $this->createQueryBuilder('f')
             ->join('f.manager', 'm');
 
-        $q = $q->andWhere('m.id = :manager_id')
+        return $q->andWhere('m.id = :manager_id')
             ->andWhere('f.date_of_end BETWEEN :from AND :to')
             ->setParameter('manager_id', $managerId)
             ->setParameter('from', $fromFormat)
             ->setParameter('to', $toFormat)
             ->getQuery()
             ->getResult();
-        return $q;
     }
 
     public function findAmountByManagerAndMonth(int $managerId, \DateTime $month, int $fineOrBonus = null): float
     {
-        $from = $month->format("Y-m-01");
-        $to = $month->format("Y-m-t");
-
-        $fromFormat = \DateTime::createFromFormat("Y-m-d", $from)->setTime(0 ,0);
-        $toFormat = \DateTime::createFromFormat("Y-m-d", $to)->setTime(23, 59);
+        list($fromFormat, $toFormat) = FormatService::formatDatesBorders($month);
 
         $q = $this->createQueryBuilder('f')
             ->join('f.manager', 'm')
@@ -110,4 +87,6 @@ class FineAndBonusRepository extends ServiceEntityRepository
             return 0;
         }
     }
+
+
 }
